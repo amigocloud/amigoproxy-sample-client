@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+    server:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+#        command: ./run_server.sh
+        expose:
+            - 5000
+        ports:
+            - "127.0.0.1:80:5000"
