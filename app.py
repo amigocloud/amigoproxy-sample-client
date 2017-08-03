@@ -7,6 +7,9 @@ import datetime
 
 import redis
 from flask import Flask, request, render_template
+from gevent import monkey
+monkey.patch_all()
+
 from gevent.wsgi import WSGIServer
 
 app = Flask(__name__)
