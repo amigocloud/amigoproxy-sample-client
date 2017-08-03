@@ -6,9 +6,11 @@ import threading
 import datetime
 
 import redis
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
+
+app.static_folder = 'static'
 
 # This is the amount of seconds between events before an alert is triggered
 MAX_INACTIVE_SECONDS = 300
@@ -40,13 +42,13 @@ def base():
         time_diff = (now - last_save).seconds
 
         if time_diff < MAX_INACTIVE_SECONDS:
-            return ('Last value: %s' +\
-                ' Seconds since last save %s') % (
-                REDIS_SERVER.get('last_value'), time_diff)
+            return render_template('last_value.html',
+                                   last_value=REDIS_SERVER.get('last_value'),
+                                   seconds_since_save=time_diff)
         else:
             # This string will be returned if it looks like no proxy requests
             # are coming in
-            return 'Proxy not responding.'
+            return render_template('not_responding.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
